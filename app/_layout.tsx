@@ -16,6 +16,10 @@ import "react-native-reanimated";
 
 import { useMigrations } from "drizzle-orm/expo-sqlite/migrator";
 
+import "@/global.css";
+
+import { PortalHost } from "@rn-primitives/portal";
+
 export default function RootLayout() {
   const colorScheme = useColorScheme();
   const expoDb = openDatabaseSync(DATABASE_NAME);
@@ -39,6 +43,7 @@ export default function RootLayout() {
           <Stack.Screen name="+not-found" />
         </Stack>
         <StatusBar style="auto" />
+        <PortalHost />
       </ThemeProvider>
     </SQLiteProvider>
   );
