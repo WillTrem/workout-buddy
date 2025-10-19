@@ -1,59 +1,50 @@
-# One Zero
+# Welcome to your Expo app 👋
 
-## Install
+This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
 
-Install packages with yarn:
+## Get started
 
-```sh
-yarn install
-```
+1. Install dependencies
 
-For login, we have set up Github auth with [Better Auth](https://www.better-auth.com/) as an example.
+   ```bash
+   npm install
+   ```
 
-1. [Create a new Github App](https://docs.github.com/en/apps/creating-github-apps/registering-a-github-app/registering-a-github-app#registering-a-github-app) at https://github.com/settings/apps.
-  * For local development, add a Callback URL like `http://localhost:8081/api/auth/callback/github` under the "Identifying and authorizing users" section.
-2. Copy `.env.example` to `.env` (`cp .env.example .env`).
-3. Fill in `GITHUB_CLIENT_ID` and `GITHUB_CLIENT_SECRET`.
+2. Start the app
 
-## Run
+   ```bash
+   npx expo start
+   ```
 
-> Before you start, make sure you have Docker running on your machine.
-> If you haven't set up Docker yet, we recommend using [OrbStack](https://orbstack.dev/) on macOS.
+In the output, you'll find options to open the app in a
 
-In three separate terminal tabs, run:
+- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
+- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
+- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
+- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
 
-```bash
-yarn docker up
-yarn zero
-yarn dev
-```
+You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
 
-To run tauri, you can run this instead of `yarn dev`:
+## Get a fresh project
 
-```bash
-yarn dev:tauri
-```
-
-To reset all your data:
+When you're ready, run:
 
 ```bash
-yarn docker:start:clean
+npm run reset-project
 ```
 
-## Tauri
+This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
 
-If you'd like to build a desktop app you may want to use Tauri. You can remove it if you don't need it.
+## Learn more
 
-Getting Tauri to handle auth in a sane way takes a bit of work, but we've set up most of it here for you. If you're using OAuth, you don't want to force your users to login via the Tauri window, as they will lack all saved credentials and be forced to memorize their password / not use passkeys, etc.
+To learn more about developing your project with Expo, look at the following resources:
 
-So instead we open the login link using target="_blank" so it opens in their default browser, making for a smooth login experience. But that means you need to pass back the credentials to Tauri once logged in.
+- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
+- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
 
-To do this, we added the deep-link plugin to Tauri, allowing for `one-zero://domain` style URLs to open with your native Tauri app. This allows for really nice hand-off.
+## Join the community
 
-On Mac though, you can't use deep links in dev mode. So you'll need to make a production build, drag it to your Applications folder, and run your app from there. We set up the production build to hit your same development server for now, so you can actually just use that built app as your main dev driver. It includes dev tools as you'd normally want, too. Once you set this up development is easy, and login has great UX.
+Join our community of developers creating universal apps.
 
-## Troubleshooting
-
-### Zero Server
-
-* **`Failed to decode auth token` or `Failed to parse the JSON Web Key Set HTTP response as JSON`**: Make sure your web server (`yarn dev`) is running, and that you have the correct `ZERO_AUTH_JWKS_URL` set in your `.env` file.
+- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
+- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.

@@ -1,68 +1,45 @@
-import '~/tamagui/tamagui.css'
-import './_layout.css'
+import { DATABASE_NAME } from "@/constants/dbConstants";
+import migrations from "@/drizzle/migrations";
+import { useColorScheme } from "@/hooks/useColorScheme";
+import {
+  DarkTheme,
+  DefaultTheme,
+  ThemeProvider,
+} from "@react-navigation/native";
+import { drizzle } from "drizzle-orm/expo-sqlite";
+import { useFonts } from "expo-font";
+import { Stack } from "expo-router";
+import { openDatabaseSync, SQLiteProvider } from "expo-sqlite";
+import { StatusBar } from "expo-status-bar";
+import React from "react";
+import "react-native-reanimated";
 
-import { ZeroProvider } from '@rocicorp/zero/react'
-import { SchemeProvider, useColorScheme } from '@vxrn/color-scheme'
-import { LoadProgressBar, Slot } from 'one'
-import { useState } from 'react'
-import { isWeb, TamaguiProvider } from 'tamagui'
-import { AuthEffects } from '~/better-auth/AuthEffects'
-import { DragDropFile } from '~/interface/upload/DragDropFile'
-import config from '~/tamagui/tamagui.config'
-import { useZeroEmit, zero } from '~/zero/zero'
+import { useMigrations } from "drizzle-orm/expo-sqlite/migrator";
 
-/**
- * The root _layout.tsx filters <html /> and <body /> out on native
- */
+export default function RootLayout() {
+  const colorScheme = useColorScheme();
+  const expoDb = openDatabaseSync(DATABASE_NAME);
+  const db = drizzle(expoDb);
+  const { success, error } = useMigrations(db, migrations);
 
-export default function Layout() {
-  return (
-    <html lang="en-US">
-      <head>
-        <meta charSet="utf-8" />
-        <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
-        <meta property="og:image" content={`${process.env.ONE_SERVER_URL}/og.jpg`} />
-        <meta property="og:image:width" content="1200" />
-        <meta property="og:image:height" content="630" />
-        <meta property="twitter:card" content="summary_large_image" />
-        <meta property="twitter:image" content={`${process.env.ONE_SERVER_URL}/og.jpg`} />
-        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
-        <link rel="icon" href="/favicon.svg" />
-      </head>
+  const [loaded] = useFonts({
+    SpaceMono: require("../assets/fonts/SpaceMono-Regular.ttf"),
+  });
 
-      <LoadProgressBar startDelay={1_000} />
-
-      <AuthEffects />
-
-      <DragDropFile>
-        <DataProvider>
-          <SchemeProvider>
-            <ThemeProvider>
-              <Slot />
-            </ThemeProvider>
-          </SchemeProvider>
-        </DataProvider>
-      </DragDropFile>
-    </html>
-  )
-}
-
-const DataProvider = ({ children }: { children: React.ReactNode }) => {
-  const [instance, setInstance] = useState(zero)
-
-  useZeroEmit((next) => {
-    setInstance(next)
-  })
-
-  return <ZeroProvider zero={instance}>{children}</ZeroProvider>
-}
-
-const ThemeProvider = ({ children }: { children: React.ReactNode }) => {
-  const [scheme] = useColorScheme()
+  if (!loaded) {
+    // Async font loading only occurs in development.
+    return null;
+  }
 
   return (
-    <TamaguiProvider disableInjectCSS config={config} defaultTheme={scheme}>
-      {children}
-    </TamaguiProvider>
-  )
+    <SQLiteProvider databaseName={DATABASE_NAME}>
+      <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
+        <Stack>
+          <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+          <Stack.Screen name="+not-found" />
+        </Stack>
+        <StatusBar style="auto" />
+      </ThemeProvider>
+    </SQLiteProvider>
+  );
 }

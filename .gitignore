@@ -1,39 +1,39 @@
-tamagui.css
-zero-schema.json
+# Learn more https://docs.github.com/en/get-started/getting-started-with-git/ignoring-files
 
-.yarn/*
-!.yarn/patches
-!.yarn/plugins
-!.yarn/releases
-!.yarn/sdks
-!.yarn/versions
+# dependencies
+node_modules/
 
-.turbo
+# Expo
+.expo/
+dist/
+web-build/
+expo-env.d.ts
 
-tmp
-dist
-node_modules
+# Native
+.kotlin/
+*.orig.*
+*.jks
+*.p8
+*.p12
+*.key
+*.mobileprovision
 
-*.tsbuildinfo
-*.tmp.js
+# Metro
+.metro-health-check*
 
-yarn-error.log
-tsconfig.tsbuildinfo
+# debug
+npm-debug.*
+yarn-debug.*
+yarn-error.*
+
+# macOS
 .DS_Store
+*.pem
 
-.tamagui
-
-.idea
-
-.env
 # local env files
-.env.local
-.env.development.local
-.env.test.localp
-.env.production.local
+.env*.local
 
-.expo
+# typescript
+*.tsbuildinfo
 
-# generated code
-/ios
-/android
+app-example
